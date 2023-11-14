@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import { useRef, useState } from 'react';
+import { Dot } from './Dot.tsx';
+import { useTimer } from './hooks/useTimer.ts';
+import { Square } from './Square.tsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { start, timerValue, isRunning } = useTimer(5);
+  const firstSquare = useRef(null);
+  const secondSquare = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const onClick = () => {
+    start();
+    moveCircle();
+    setIsVisible(true);
+  };
+
+  const moveCircle = () => {
+    const first = firstSquare.current.getBoundingClientRect();
+    const second = secondSquare.current.getBoundingClientRect();
+    setPosition({
+      x: first.x + first.width / 2 - 25,
+      y: first.y + first.height / 2 - 25,
+    });
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container">
+        <Square ref={firstSquare} name="1" animated={true} />
+        <Square ref={secondSquare} name="2" />
+        {isVisible && <Dot position={position} />}
       </div>
-      <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <button onClick={onClick} disabled={isRunning}>
+          {isRunning ? timerValue : 'Start'}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
