@@ -7,9 +7,9 @@ import { Square } from './Square.tsx';
 
 function App() {
   const { start, timerValue, isRunning } = useTimer(5);
-  const firstSquare = useRef(null);
-  const secondSquare = useRef(null);
-  const dotRef = useRef(null);
+  const firstSquare = useRef<HTMLDivElement | null>(null);
+  const secondSquare = useRef<HTMLDivElement | null>(null);
+  const dotRef = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const buttonValue = isRunning ? timerValue : 'Start';
@@ -21,8 +21,8 @@ function App() {
   };
 
   const moveCircle = () => {
-    const first = firstSquare.current.getBoundingClientRect();
-    const second = secondSquare.current.getBoundingClientRect();
+    const first = firstSquare.current!.getBoundingClientRect();
+    const second = secondSquare.current!.getBoundingClientRect();
 
     setPosition({
       x: first.x + first.width / 2 - 25,
@@ -37,7 +37,7 @@ function App() {
   };
 
   const onResize = () => {
-    const second = secondSquare.current.getBoundingClientRect();
+    const second = secondSquare.current!.getBoundingClientRect();
     setPosition({
       x: second.x + second.width / 2 - 25,
       y: second.y + second.height / 2 - 25,
@@ -56,7 +56,7 @@ function App() {
     if (!isVisible) {
       return;
     }
-    dotRef.current.addEventListener('transitionend', onTransitionEnd);
+    dotRef.current?.addEventListener('transitionend', onTransitionEnd);
   }, [isVisible]);
 
   return (

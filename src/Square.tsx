@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { ForwardedRef, forwardRef } from 'react';
 
 interface SquareProps {
   name: string;
@@ -6,7 +6,10 @@ interface SquareProps {
 }
 
 export const Square = forwardRef(
-  ({ name, animated = false }: SquareProps, ref) => {
+  (
+    { name, animated = false }: SquareProps,
+    ref: ForwardedRef<HTMLDivElement | null>,
+  ) => {
     return (
       <div className={`square ${animated ? 'animated' : ''}`} ref={ref}>
         {name}
